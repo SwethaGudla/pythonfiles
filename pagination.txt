@@ -1,0 +1,88 @@
+Pagination
+==========
+REST framework includes support for customizable pagination styles. This allows you to modigfy how large result sets are split into individual pages of data.
+ we have 3 types
+1.PageNumberPagination
+2.LimitOffsetPagination
+3.CursorPagination
+
+Pagination Global Setting
+=========================
+The Pagination style may be set globally, using the 
+DEFAULT_PAGINATION_CLASS and PAGE_SIZE setting keys.
+ 
+REST_FRAMEWORK={
+'DEFAULT_PAGINATION_CLASS':'rest_framework.pagination.PageNumberPagination', 
+'PAGE_SIZE':5  
+}
+
+pagination per view
+===================
+you can set the pagination class on an individual view by using the pagination_class attribute
+class StudentList(ListAPIView):
+queryset=Student.objects.all()
+serializer_class=
+pagination_class=PageNumberPagination
+
+PageNumberPagination
+====================
+* This pagination style accepts a single number page number in the request query parameters.
+* To enable the PageNumberPagination style globally, use the following configuartion and set the PAGE_SIZE as desired:
+REST_FRAMEWORK={
+'DEFAULT_PAGINATION_CLASS':
+'rest_framework.pagination.PageNumberPagination',
+'PAGE_SIZE':5
+}
+
+http://127.0.0.1:8000/studentapi/?page=3
+
+The PageNumberPagination class includes a number of attributes that may be overriden to modify the pagination style.
+To set these attributes you should override the PageNumberPagination class and then enabl your custom pagination class.
+. django_paginator_class : The django paginator class to use.Default is django.core.paginator.Paginator, which should be fine for most use cases.
+
+. page_size : Numeric value indicating the page size. If set this override the PAGE_SIZE setting.Defaults to the same value as the PAGE_SIZE setting key.
+
+. page_query_param : string value indicating the name of qquery parameters to use for the pagination control.
+ 
+. page_size_query_param : string value indicating the name of a query parameter that allowstp the client to set the page size on a pre-request basis.
+
+.max_page_size : numeric valu indicating the maxinum allowable requested page size.
+only valid for page_size_query_param.
+
+.last_page_strings : A list or tuple of string values indicating the vales may b used the page_query_apram to request the final page.
+
+.template : template is used when rendering the pagnation controls inthe browsable API.
+"rest_framework/pagination/number.html".
+
+Limit Offset Pagination:
+========================
+The client includes both "Limit" and "Offset" query parameters.
+limit->maxinum number of items returns and equivalent to the page_size in other styles.
+Offset->indicates the starting position of the query in relation to the complete set of unpaginated items.
+
+REST_FRAMEWORK={
+'DEFAULT_PAGINATION_CLASS' : 'rest_framework.pagination.LimitOffsetPagination'
+}
+
+run=> https://127.0.0.1.8000/studentapi/?limit=4&offset=6
+
+The LimitOffsetPagination class includes a number of attributes that may be overridden to modify the pagination style.
+To set these attributes you should override the LimitOffsetPagination class and then enables our custom pagination class.
+
+. default_limit : limit to use 
+. limit_query_param : string values indicating the name of the "limit" query parameter. Default to "limit".
+. offset_query_param : string value indicates thhe name of the "offset" query parameter. Defaukt to "offset"
+. max_limit - maxinum allowable.
+.template
+
+Cursor Pagination:
+================== 
+The cursor based pagination presents an opaque "cursor" indicator that the client may use to page through the result set.
+The pagination style only presents forward and reverse controls and does not allow the client to navigate to arbitrary positions.
+
+Cursor -there is a unique , unchanging ordering of items in the result set. creation of timestamp on the records, 
+
+. Page_size - numeric vales indicationg the page size.
+. cursor_query_param - A String value indicationg the "cursor" query parameter
+. ordering - This should be string or list of string, indicating the field against which the cursor based on the pagination will be applied.
+. templat e

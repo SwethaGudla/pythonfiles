@@ -1,0 +1,21 @@
+--pip install django
+--django-admin startproject pytestpro
+--django-admin startapp pytestapp
+--create test folder inside app level and create test.py file
+--pip install pytest-django
+create one folder inside projectfolder.
+--craete two file -- pytest.ini and test_ex1.py file
+in pytest.ini--file we can write
+[pytest]
+DJANGO_SETTINGS_MODULE = pytestpro.settings
+python_files = test_*.py 
+
+-- in app.py file we can write
+name = 'pytestapp' in place we write name='pytestpro.pytestapp'
+-- In test_ex1.py file
+import pytest
+def test_example():
+    assert 1 == 1
+
+we can run in terminal 
+--pytest
